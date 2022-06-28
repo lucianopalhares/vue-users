@@ -5,5 +5,9 @@ export default {
     
         // With options
         ['@nuxtjs/vuetify', { /* module options */ }]
-    ]
+    ],
+    modules: ['@nuxtjs/axios'],
+    axios: {
+       
+    }
   }

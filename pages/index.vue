@@ -311,6 +311,10 @@
         ],
       }
     },
+    created() {
+        const users = this.loadUsers();
+        console.log(users)
+    },
     computed: {
       numberOfPages () {
         return Math.ceil(this.items.length / this.itemsPerPage)
@@ -329,6 +333,9 @@
       updateItemsPerPage (number) {
         this.itemsPerPage = number
       },
+      async loadUsers () {
+        return await this.$axios.$get('https://api.github.com/users')
+      }
     },
   }
 </script>
