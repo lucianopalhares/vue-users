@@ -1,5 +1,27 @@
 <template>
+
   <v-container fluid>
+
+    <template>
+    <v-card>
+        <v-toolbar
+        color="cyan"
+        dark
+        flat
+        >
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+        <v-toolbar-title>Pessoas do GitHub</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+
+
+        </v-toolbar>
+
+    </v-card>
+    </template>
+
     <v-data-iterator
       :items="items"
       :items-per-page.sync="itemsPerPage"
@@ -8,7 +30,8 @@
       :sort-by="sortBy.toLowerCase()"
       :sort-desc="sortDesc"
       hide-default-footer
-    >
+    >   
+    
       <template v-slot:header>
         <v-toolbar
           dark
@@ -22,89 +45,50 @@
             solo-inverted
             hide-details
             prepend-inner-icon="mdi-magnify"
-            label="Search"
+            label="Buscar"
           ></v-text-field>
-          <template v-if="$vuetify.breakpoint.mdAndUp">
-            <v-spacer></v-spacer>
-            <v-select
-              v-model="sortBy"
-              flat
-              solo-inverted
-              hide-details
-              :items="keys"
-              prepend-inner-icon="mdi-magnify"
-              label="Sort by"
-            ></v-select>
-            <v-spacer></v-spacer>
-            <v-btn-toggle
-              v-model="sortDesc"
-              mandatory
-            >
-              <v-btn
-                large
-                depressed
-                color="blue"
-                :value="false"
-              >
-                <v-icon>mdi-arrow-up</v-icon>
-              </v-btn>
-              <v-btn
-                large
-                depressed
-                color="blue"
-                :value="true"
-              >
-                <v-icon>mdi-arrow-down</v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </template>
+         
         </v-toolbar>
       </template>
 
+        <template v-slot:no-results>
+            <span>Nada encontrado</span>
+        </template>
+
       <template v-slot:default="props">
-        <v-row>
+        <v-row style="margin-top:40px;">
           <v-col
             v-for="item in props.items"
             :key="item.name"
             cols="12"
             sm="6"
-            md="4"
-            lg="3"
+            md="6"
+            lg="1"
           >
         <v-card
             class="mx-auto"
-            max-width="400"
         >
             <v-img
             class="white--text align-end"
             height="200px"
-            :src="item.src"
+            :src="item.avatar_url"
             >
-            <v-card-title>Top 10 Australian beaches</v-card-title>
+            <v-card-title></v-card-title>
                 </v-img>
 
-                <v-card-subtitle class="pb-0" v-text="item.name">
+                <v-card-subtitle class="pb-0" v-text="item.login">
                 </v-card-subtitle>
-
+<!--
                 <v-card-text class="text--primary">
-                <div>Whitehaven Beach</div>
+                <div>text</div>
 
-                <div>Whitsunday Island, Whitsunday Islands</div>
+                <div>text</div>
                 </v-card-text>
+-->
+                <v-card-actions>              
 
-                <v-card-actions>
-                <v-btn
-                    color="orange"
-                    text
-                >
-                    Share
-                </v-btn>
-
-                <v-btn
-                    color="orange"
-                    text
-                >
-                    Explore
+                <v-btn src="https://api.github.com/users/mojombo">
+                    GITHUB
                 </v-btn>
                 </v-card-actions>
             </v-card>
@@ -115,11 +99,11 @@
 
       <template v-slot:footer>
         <v-row
-          class="mt-2"
+          style="margin-top:50px;"
           align="center"
           justify="center"
         >
-          <span class="grey--text">Items per page</span>
+          <span class="red">Items por pagina</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -151,7 +135,7 @@
             class="mr-4
             grey--text"
           >
-            Page {{ page }} of {{ numberOfPages }}
+            Pagina {{ page }} de {{ numberOfPages }}
           </span>
           <v-btn
             fab
@@ -185,7 +169,7 @@
         filter: {},
         sortDesc: false,
         page: 1,
-        itemsPerPage: 4,
+        itemsPerPage: 24,
         sortBy: 'name',
         keys: [
           'Name',
@@ -312,8 +296,7 @@
       }
     },
     created() {
-        const users = this.loadUsers();
-        console.log(users)
+       this.loadUsers();       
     },
     computed: {
       numberOfPages () {
@@ -334,7 +317,8 @@
         this.itemsPerPage = number
       },
       async loadUsers () {
-        return await this.$axios.$get('https://api.github.com/users')
+        this.items = await this.$axios.$get('https://api.github.com/users?per_page=100')
+        console.log(this.items)
       }
     },
   }
