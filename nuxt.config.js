@@ -1,14 +1,11 @@
 export default {
     buildModules: [
-        // Simple usage
         '@nuxtjs/vuetify',
-    
-        // With options
-        ['@nuxtjs/vuetify', { /* module options */ }]
     ],
     modules: ['@nuxtjs/axios'],
     plugins: [
-        { src: '@/plugins/axios.js' }
+        { src: '@/plugins/axios.js' },
+        { src: '@/plugins/vuetify.js' },
     ],
     axios: {
        
